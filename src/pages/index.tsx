@@ -17,7 +17,7 @@ export default function Home({ images }: { images: Images }) {
       </Head>
       <h1 className="text-center">ćpanie u kajtka</h1>
       <Container className="d-flex flex-wrap">
-        {images.resources.map((image: any) => (
+        {images.resources.map((image) => (
           <div key={image.asset_id} className="rounded inline-block">
             <NextImage src={image.url} width="80" height="80" />
           </div>
