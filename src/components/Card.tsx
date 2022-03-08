@@ -42,7 +42,7 @@ const Card = ({ image }: { image: Resource }) => {
   }, [image, image.asset_id, isCorrect, selectedCards]);
 
   const onClick = () => {
-    if (isCorrect) return;
+    if (isTurned) return;
 
     setSelectedCards(() => {
       if (selectedCards.first) {
