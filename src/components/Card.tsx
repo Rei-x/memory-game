@@ -1,10 +1,11 @@
-import { Resource } from '@/types/cloudinaryImages';
+import { CloudinaryImage } from '@/types/cloudinaryImages';
 import React, { useEffect, useState } from 'react';
 import NextImage from 'next/image';
 import { motion } from 'framer-motion';
 import styles from './Card.module.scss';
-import { useRecoilState, useRecoilValue, useSetRecoilState } from 'recoil';
-import { correctCardsAtom, selectedCardsAtom } from '@/atoms/Board';
+import { useRecoilState } from 'recoil';
+import { selectedCards as selectedCardsSelector } from '@/atoms/Card.atom';
+import { useIsCardCorrect } from '@/hooks/useIsCardCorrect';
 
 const variants = {
   normal: {
@@ -15,18 +16,12 @@ const variants = {
   },
 };
 
-const Card = ({ image }: { image: Resource }) => {
-  const [selectedCards, setSelectedCards] = useRecoilState(selectedCardsAtom);
+const Card = ({ image }: { image: CloudinaryImage }) => {
+  const [selectedCards, setSelectedCards] = useRecoilState(
+    selectedCardsSelector,
+  );
   const [isTurned, setIsTurned] = useState(false);
-  const [isCorrect, setIsCorrect] = useState(false);
-  const correctCards = useRecoilValue(correctCardsAtom);
-
-  useEffect(() => {
-    const isGuessed = () => {
-      return correctCards.includes(image);
-    };
-    setIsCorrect(isGuessed());
-  }, [correctCards, image]);
+  const isCorrect = useIsCardCorrect(image);
 
   useEffect(() => {
     const isSelected = () => {
@@ -39,7 +34,7 @@ const Card = ({ image }: { image: Resource }) => {
       return false;
     };
     setIsTurned(isCorrect || isSelected());
-  }, [image, image.asset_id, isCorrect, selectedCards]);
+  }, [image.asset_id, isCorrect, selectedCards]);
 
   const onClick = () => {
     if (isTurned) return;
@@ -61,11 +56,13 @@ const Card = ({ image }: { image: Resource }) => {
 
   return (
     <motion.div
+      layout
+      layoutId={image.asset_id}
       key={image.asset_id}
       className={`rounded ${styles.card} ${isCorrect && styles.inactive}`}
       variants={variants}
       animate={isTurned ? `turned` : `normal`}
-      transition={{ duration: 0.2 }}
+      transition={{ duration: 1 }}
       onClick={() => onClick()}
     >
       <div className={`${styles.cardFace}`}>

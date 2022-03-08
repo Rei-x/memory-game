@@ -1,12 +1,12 @@
 export interface Images {
-  resources: Resource[];
+  resources: CloudinaryImage[];
   next_cursor: string;
   rate_limit_allowed: number;
   rate_limit_reset_at: null;
   rate_limit_remaining: number;
 }
 
-export interface Resource {
+export interface CloudinaryImage {
   asset_id: string;
   public_id: string;
   format: Format;
