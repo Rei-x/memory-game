@@ -2,6 +2,7 @@ import { Images } from '@/types/cloudinaryImages';
 import React, { useEffect, useState } from 'react';
 import { Container } from 'react-bootstrap';
 import NextImage from 'next/image';
+import Card from './Card';
 
 const shuffleArray = (array: any[]) => {
   const newArray = JSON.parse(JSON.stringify(array));
@@ -26,9 +27,7 @@ const Board = ({ images }: { images: Images }) => {
   return (
     <Container className="d-flex flex-wrap">
       {cards.map((image) => (
-        <div key={image.asset_id} className="rounded inline-block">
-          <NextImage src={image.url} width="80" height="80" />
-        </div>
+        <Card key={image.asset_id} image={image} />
       ))}
     </Container>
   );

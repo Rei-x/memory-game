@@ -1,5 +1,4 @@
 import Head from 'next/head';
-import NextImage from 'next/image';
 import cloudinary from 'cloudinary';
 import { Container } from 'react-bootstrap';
 import { Images } from '@/types/cloudinaryImages';
@@ -9,7 +8,7 @@ export default function Home({ images }: { images: Images }) {
   return (
     <Container>
       <Head>
-        <title>TypeScript starter for Next.js</title>
+        <title>Ćpanie u Kajtka 👃</title>
         <meta
           name="description"
           content="TypeScript starter for Next.js that includes all you need to build amazing apps"
@@ -31,7 +30,7 @@ export async function getStaticProps() {
 
   const images = (await cloudinary.v2.api.resources(
     {
-      max_results: 25,
+      max_results: 5,
       type: `upload`,
       prefix: `cats`,
     },
