@@ -1,14 +1,17 @@
 import { selectedCards as selectedCardsSelector } from '@/atoms/Card.atom';
 import { useCards } from '@/hooks/useCards';
+import { useCheckForWin } from '@/hooks/useCheckForWin';
 import { Images } from '@/types/cloudinaryImages';
 import React, { useEffect } from 'react';
 import { Container } from 'react-bootstrap';
 import { useRecoilState } from 'recoil';
+import seedrandom from 'seedrandom';
 import Card from './Card';
 
 const shuffleArray = (array: any[]) => {
+  const rng = seedrandom(`luigi`);
   const newArray = JSON.parse(JSON.stringify(array)) as any[];
-  newArray.sort(() => 0.5 - Math.random());
+  newArray.sort(() => 0.5 - rng());
   return newArray;
 };
 
@@ -17,6 +20,7 @@ const Board = ({ images }: { images: Images }) => {
   const [selectedCards, setSelectedCards] = useRecoilState(
     selectedCardsSelector,
   );
+  const isWin = useCheckForWin(cards);
 
   useEffect(() => {
     if (selectedCards.first !== null && selectedCards.second !== null) {
@@ -39,6 +43,7 @@ const Board = ({ images }: { images: Images }) => {
           <Card key={image.asset_id} image={image} />
         ))}
       </Container>
+      {isWin && <div>Wygrałeś!!</div>}
     </Container>
   );
 };

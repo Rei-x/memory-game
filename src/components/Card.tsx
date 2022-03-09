@@ -10,9 +10,15 @@ import { useIsCardCorrect } from '@/hooks/useIsCardCorrect';
 const variants = {
   normal: {
     rotateY: 0,
+    transition: {
+      duration: 0.3,
+    },
   },
   turned: {
     rotateY: `180deg`,
+    transition: {
+      duration: 0.3,
+    },
   },
 };
 
@@ -65,8 +71,9 @@ const Card = ({ image }: { image: CloudinaryImage }) => {
       transition={{ duration: 1 }}
       onClick={() => onClick()}
     >
-      <div className={`${styles.cardFace}`}>
+      <div className={`rounded ${styles.cardFace}`}>
         <NextImage
+          className="rounded"
           draggable={false}
           src={`https://t3.ftcdn.net/jpg/03/35/13/14/360_F_335131435_DrHIQjlOKlu3GCXtpFkIG1v0cGgM9vJC.jpg`}
           width="80"
@@ -74,7 +81,13 @@ const Card = ({ image }: { image: CloudinaryImage }) => {
         />
       </div>
       <div className={`${styles.cardFace} ${styles.cardBackFace}`}>
-        <NextImage draggable={false} src={image.url} width="80" height="80" />
+        <NextImage
+          className="rounded"
+          draggable={false}
+          src={image.url}
+          width="80"
+          height="80"
+        />
       </div>
     </motion.div>
   );

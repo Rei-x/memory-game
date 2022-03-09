@@ -1,9 +1,11 @@
 import { Images, CloudinaryImage } from '@/types/cloudinaryImages';
 import { Dispatch, SetStateAction, useMemo, useState } from 'react';
+import seedrandom from 'seedrandom';
 
 const shuffleArray = (array: any[]) => {
+  const rng = seedrandom(`luigi`);
   const newArray = JSON.parse(JSON.stringify(array)) as any[];
-  newArray.sort(() => 0.5 - Math.random());
+  newArray.sort(() => 0.5 - rng());
   return newArray;
 };
 

@@ -6,12 +6,11 @@
   width: 80px;
   height: 80px;
   border-radius: 4px;
-  box-shadow: 2px 2px 4px 4px #dedede;
+  box-shadow: 2px 2px 2px 2px #dedede;
   transform-style: preserve-3d;
   position: relative;
   cursor: pointer;
   user-select: none;
-  user-drag: none;
 
   img {
     width: 95%;
