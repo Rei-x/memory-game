@@ -2,8 +2,9 @@ import { db } from '@/services/database';
 import { get, off, onValue, ref } from 'firebase/database';
 import { atom, AtomEffect } from 'recoil';
 
-interface User {
+export interface User {
   isOnline: boolean;
+  avatar: string;
 }
 
 const syncUsers =

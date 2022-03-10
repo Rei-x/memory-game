@@ -4,7 +4,7 @@ if (config === undefined) {
   console.error(`Firebase config isn't specified in env variables.`);
   throw new Error();
 }
-console.log(config);
+
 const parsedConfig = JSON.parse(config);
 
 export default parsedConfig;
