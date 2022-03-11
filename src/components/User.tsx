@@ -1,38 +1,64 @@
 import React from 'react';
 import NextImage from 'next/image';
-import { User } from '@/atoms/User.atom';
-import { Button } from 'react-bootstrap';
+import { UserInList } from '@/atoms/UserList.atom';
+import styles from './User.module.scss';
+import { useSetRecoilState } from 'recoil';
+import { selectedUserAtom } from '@/atoms/SelectedUser.atom';
+import { motion } from 'framer-motion';
+
+const capitalizeFirstLetter = (text: string) => {
+  return text.charAt(0).toUpperCase() + text.slice(1);
+};
+
+const variants = {
+  online: {
+    opacity: 0.5,
+  },
+  offline: {
+    opacity: 1,
+  },
+};
 
 const UserInfo = ({
   url,
   user,
-  username,
+  id,
+  showModal,
 }: {
   url: string;
-  user: User;
-  username: string;
+  user: UserInList;
+  id: string;
+  showModal: () => void;
 }) => {
+  const setSelectedUser = useSetRecoilState(selectedUserAtom);
+  const handleClick = () => {
+    if (user.isOnline) return;
+    showModal();
+    setSelectedUser(id);
+  };
+
   return (
-    <div
-      className={`shadow rounded p-3 mt-3 d-flex flex-column align-items-center ${
-        user.isOnline && `opacity-50`
-      }`}
-      style={{ width: `250px` }}
+    <motion.div
+      suppressHydrationWarning={true}
+      animate={user.isOnline ? `online` : `offline`}
+      transition={{
+        duration: 0.2,
+      }}
+      variants={variants}
+      className={`rounded mt-3 d-flex flex-column align-items-center`}
     >
-      <div>
-        <NextImage
-          src={url}
-          alt="cat"
-          className="rounded"
-          width={`80px`}
-          height={`80px`}
-        />
-      </div>
-      <h3 className="mt-2">{username}</h3>
-      <Button className="mt-2 w-50" disabled={user.isOnline}>
-        To ja!
-      </Button>
-    </div>
+      <NextImage
+        src={url}
+        alt="cat"
+        className={`rounded shadow-lg pointer ${
+          !user.isOnline && styles.pointer
+        }`}
+        width={`100px`}
+        height={`100px`}
+        onClick={handleClick}
+      />
+      <h6 className="mt-1">{capitalizeFirstLetter(user.nickname)}</h6>
+    </motion.div>
   );
 };
 

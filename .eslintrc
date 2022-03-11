@@ -34,6 +34,7 @@
       "plugins": ["@typescript-eslint/eslint-plugin"],
       "extends": ["plugin:@typescript-eslint/recommended", "prettier"],
       "rules": {
+        "@typescript-eslint/no-non-null-assertion": "off",
         "@typescript-eslint/explicit-function-return-type": "off",
         "@typescript-eslint/explicit-module-boundary-types": "off",
         "no-use-before-define": [0],

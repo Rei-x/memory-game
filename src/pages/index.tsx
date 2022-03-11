@@ -3,21 +3,24 @@ import cloudinary from 'cloudinary';
 import { Container } from 'react-bootstrap';
 import { Images } from '@/types/cloudinaryImages';
 import Board from '@/components/Board';
+import Layout from '@/components/Layout';
 
 export default function Home({ images }: { images: Images }) {
   return (
-    <Container>
-      <Head>
-        <title>Ćpanie u Kajtka 👃</title>
-        <meta
-          name="description"
-          content="TypeScript starter for Next.js that includes all you need to build amazing apps"
-        />
-        <link rel="icon" href="/favicon.ico" />
-      </Head>
-      <h1 className="text-center">ćpanie u kajtka</h1>
-      <Board images={images} />
-    </Container>
+    <Layout>
+      <Container>
+        <Head>
+          <title>kajtekparty 🎉</title>
+          <meta
+            name="description"
+            content="TypeScript starter for Next.js that includes all you need to build amazing apps"
+          />
+          <link rel="icon" href="/favicon.ico" />
+        </Head>
+        <h1 className="text-center">ćpanie u kajtka</h1>
+        <Board images={images} />
+      </Container>
+    </Layout>
   );
 }
 

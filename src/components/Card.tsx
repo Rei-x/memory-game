@@ -65,7 +65,9 @@ const Card = ({ image }: { image: CloudinaryImage }) => {
       layout
       layoutId={image.asset_id}
       key={image.asset_id}
-      className={`rounded ${styles.card} ${isCorrect && styles.inactive}`}
+      className={`rounded m-1 shadow ${styles.card} ${
+        isCorrect && styles.inactive
+      }`}
       variants={variants}
       animate={isTurned ? `turned` : `normal`}
       transition={{ duration: 1 }}
@@ -75,7 +77,7 @@ const Card = ({ image }: { image: CloudinaryImage }) => {
         <NextImage
           className="rounded"
           draggable={false}
-          src={`https://t3.ftcdn.net/jpg/03/35/13/14/360_F_335131435_DrHIQjlOKlu3GCXtpFkIG1v0cGgM9vJC.jpg`}
+          src={`/questionmark.jpg`}
           width="80"
           height="80"
         />
