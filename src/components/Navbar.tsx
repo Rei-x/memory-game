@@ -1,12 +1,14 @@
-import { userAtom } from '@/atoms/User.atom';
 import React from 'react';
 import { Navbar, Nav, Container, Button } from 'react-bootstrap';
-import { useRecoilState } from 'recoil';
 import NextImage from 'next/image';
 import { useRouter } from 'next/router';
+import { useUser } from '@/hooks/useUser';
+import { useSetRecoilState } from 'recoil';
+import { userIdAtom } from '@/atoms/UserId.atom';
 
 const CustomNavbar = () => {
-  const [user, setUser] = useRecoilState(userAtom);
+  const [user] = useUser();
+  const setUserId = useSetRecoilState(userIdAtom);
   const router = useRouter();
 
   return (
@@ -20,10 +22,10 @@ const CustomNavbar = () => {
           quality={100}
         />
         <Nav className="ms-auto">
-          <Nav.Link href="#home">{user && user.data.nickname}</Nav.Link>
+          <Nav.Link href="#home">{user && user.nickname}</Nav.Link>
           <Button
             onClick={() => {
-              setUser(null);
+              setUserId(null);
               router.push(`/login`);
             }}
           >

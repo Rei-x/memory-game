@@ -6,16 +6,16 @@ import cloudinary from 'cloudinary';
 import { Images } from '@/types/cloudinaryImages';
 import UserInfo from '@/components/User';
 import { selectedUserAtom } from '@/atoms/SelectedUser.atom';
-import { userAtom } from '@/atoms/User.atom';
 import { useRouter } from 'next/router';
 import { GetStaticProps } from 'next';
+import { userIdAtom } from '@/atoms/UserId.atom';
 
 const Login = ({ images }: { images: Images }) => {
   const users = useRecoilValue(userListAtom);
   const [showUsers, setShowUsers] = useState(false);
-  const [selectedUser, setSelectedUser] = useRecoilState(selectedUserAtom);
   const [showModal, setShowModal] = useState(false);
-  const [user, setUser] = useRecoilState(userAtom);
+  const [selectedUser, setSelectedUser] = useRecoilState(selectedUserAtom);
+  const [userId, setUserId] = useRecoilState(userIdAtom);
   const router = useRouter();
 
   const getImageUrl = (username: string) => {
@@ -27,20 +27,7 @@ const Login = ({ images }: { images: Images }) => {
   const loginUser = () => {
     if (users === null || selectedUser === null) return;
 
-    setUser({
-      id: selectedUser,
-      data: {
-        ...users[selectedUser],
-        isOnline: true,
-      },
-    });
-    setUser({
-      id: selectedUser,
-      data: {
-        ...users[selectedUser],
-        isOnline: true,
-      },
-    });
+    setUserId(selectedUser);
   };
 
   useEffect(() => {
@@ -50,10 +37,11 @@ const Login = ({ images }: { images: Images }) => {
   }, [users]);
 
   useEffect(() => {
-    if (user) {
+    router.prefetch(`/`);
+    if (userId !== null) {
       router.push(`/`);
     }
-  }, [router, user]);
+  }, [router, userId]);
 
   return (
     <Container className="mt-5 text-center">
