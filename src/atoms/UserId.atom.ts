@@ -1,38 +1,26 @@
-import { db } from '@/services/database';
-import { ref, off, update, onDisconnect } from 'firebase/database';
-import { usePresence } from 'framer-motion';
 import { atom, AtomEffect } from 'recoil';
+import Cookies from 'js-cookie';
 
-export interface User {
-  nickname: string;
-  isOnline: boolean;
-  avatar?: string;
-}
-
-export const userAtom = atom<User | null>({
-  key: `user`,
-  default: null,
-});
-
-const updatePresence =
+const persistStorage =
   (): AtomEffect<string | null> =>
-  ({ onSet }) => {
-    onSet((newValue, oldValue) => {
-      if (typeof oldValue === `string`) {
-        const userRef = ref(db, `users/${oldValue}`);
-        off(userRef);
-        update(userRef, {
-          isOnline: false,
-        });
+  ({ onSet, setSelf }) => {
+    if (typeof window !== `undefined`) {
+      const userId = localStorage.getItem(`userId`);
+
+      if (userId) {
+        setSelf(userId);
+        Cookies.set(`userId`, userId);
+      } else {
+        Cookies.remove(`userId`);
       }
-      if (typeof newValue === `string`) {
-        const userRef = ref(db, `users/${newValue}`);
-        update(userRef, {
-          isOnline: true,
-        });
-        onDisconnect(userRef).update({
-          isOnline: false,
-        });
+    }
+    onSet((newUserId) => {
+      if (newUserId) {
+        localStorage.setItem(`userId`, newUserId);
+        Cookies.set(`userId`, newUserId);
+      } else {
+        localStorage.removeItem(`userId`);
+        Cookies.remove(`userId`);
       }
     });
   };
@@ -40,5 +28,5 @@ const updatePresence =
 export const userIdAtom = atom<string | null>({
   key: `userId`,
   default: null,
-  effects: [updatePresence()],
+  effects: [persistStorage()],
 });

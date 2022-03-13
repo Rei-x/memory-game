@@ -3,12 +3,9 @@ import { Navbar, Nav, Container, Button } from 'react-bootstrap';
 import NextImage from 'next/image';
 import { useRouter } from 'next/router';
 import { useUser } from '@/hooks/useUser';
-import { useSetRecoilState } from 'recoil';
-import { userIdAtom } from '@/atoms/UserId.atom';
 
 const CustomNavbar = () => {
-  const [user] = useUser();
-  const setUserId = useSetRecoilState(userIdAtom);
+  const { user, setUserId } = useUser();
   const router = useRouter();
 
   return (

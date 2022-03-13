@@ -8,14 +8,14 @@ import UserInfo from '@/components/User';
 import { selectedUserAtom } from '@/atoms/SelectedUser.atom';
 import { useRouter } from 'next/router';
 import { GetStaticProps } from 'next';
-import { userIdAtom } from '@/atoms/UserId.atom';
+import { useUser } from '@/hooks/useUser';
 
 const Login = ({ images }: { images: Images }) => {
   const users = useRecoilValue(userListAtom);
   const [showUsers, setShowUsers] = useState(false);
   const [showModal, setShowModal] = useState(false);
   const [selectedUser, setSelectedUser] = useRecoilState(selectedUserAtom);
-  const [userId, setUserId] = useRecoilState(userIdAtom);
+  const { setUserId, userId } = useUser();
   const router = useRouter();
 
   const getImageUrl = (username: string) => {

@@ -1,15 +1,14 @@
+import { useUser } from '@/hooks/useUser';
 import React from 'react';
 import { Container } from 'react-bootstrap';
-import { useRecoilValue } from 'recoil';
-import { userAtom } from '@/atoms/User.atom';
 
 const Firebase = () => {
-  const data = useRecoilValue(userAtom);
+  const { user } = useUser();
 
   return (
     <Container>
       User
-      <pre>{JSON.stringify(data)}</pre>
+      <pre>{JSON.stringify(user)}</pre>
     </Container>
   );
 };
