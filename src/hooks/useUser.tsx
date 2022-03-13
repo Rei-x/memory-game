@@ -33,6 +33,7 @@ export const useUser = () => {
       isOnline: false,
     });
 
+    off(userRef);
     onValue(userRef, (snapshot) => {
       setRecoilUser(snapshot.val());
     });

@@ -4,6 +4,7 @@ import { Container } from 'react-bootstrap';
 import { Images } from '@/types/cloudinaryImages';
 import Board from '@/components/Board';
 import Layout from '@/components/Layout';
+import Tournaments from '@/components/Tournaments';
 
 export default function Home({ images }: { images: Images }) {
   return (
@@ -18,7 +19,7 @@ export default function Home({ images }: { images: Images }) {
           <link rel="icon" href="/favicon.ico" />
         </Head>
         <h1 className="text-center">ćpanie u kajtka</h1>
-        <Board images={images} />
+        <Tournaments />
       </Container>
     </Layout>
   );
