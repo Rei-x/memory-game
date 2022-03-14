@@ -2,8 +2,7 @@ import Layout from '@/components/Layout';
 import { db } from '@/services/database';
 import { ref } from 'firebase/database';
 import { GetServerSideProps, InferGetServerSidePropsType } from 'next';
-import { useRouter } from 'next/router';
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 import { Container } from 'react-bootstrap';
 import { useObject } from 'react-firebase-hooks/database';
 
@@ -33,9 +32,11 @@ const Lobby = ({
 export const getServerSideProps: GetServerSideProps = async (context) => {
   const { id } = context.params as { id: string };
 
+  const tournamentId = id ? id.replaceAll(`-`, ` `) : `undefined`;
+
   return {
     props: {
-      tournamentId: id.replaceAll(`-`, ` `),
+      tournamentId,
     },
   };
 };
