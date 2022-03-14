@@ -1,6 +1,7 @@
 import React from 'react';
 import { Navbar, Nav, Container, Button } from 'react-bootstrap';
 import NextImage from 'next/image';
+import NextLink from 'next/link';
 import { useRouter } from 'next/router';
 import { useUser } from '@/hooks/useUser';
 
@@ -11,13 +12,15 @@ const CustomNavbar = () => {
   return (
     <Navbar bg="light" variant="light">
       <Container>
-        <NextImage
-          className="me-auto"
-          src="/logo.png"
-          height={37}
-          width={174}
-          quality={100}
-        />
+        <NextLink href="/">
+          <NextImage
+            className="me-auto"
+            src="/logo.png"
+            height={37}
+            width={174}
+            quality={100}
+          />
+        </NextLink>
         <Nav className="ms-auto">
           <Nav.Link href="#home">{user && user.nickname}</Nav.Link>
           <Button
