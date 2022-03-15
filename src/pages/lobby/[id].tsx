@@ -32,7 +32,8 @@ const Lobby = ({
 export const getServerSideProps: GetServerSideProps = async (context) => {
   const { id } = context.params as { id: string };
 
-  const tournamentId = id ? id.replaceAll(`-`, ` `) : `undefined`;
+  const tournamentId =
+    typeof id === `string` ? id.replaceAll(`-`, ` `) : `undefined`;
 
   return {
     props: {
