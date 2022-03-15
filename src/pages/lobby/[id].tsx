@@ -33,7 +33,7 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
   const { id } = context.params as { id: string };
 
   const tournamentId =
-    typeof id === `string` ? id.replaceAll(`-`, ` `) : `undefined`;
+    typeof id === `string` ? id.replace(/-/i, ` `) : `undefined`;
 
   return {
     props: {
