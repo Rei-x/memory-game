@@ -8,6 +8,9 @@ import { useRecoilState } from 'recoil';
 export const useUser = () => {
   const [userId, setUserId] = useRecoilState(userIdAtom);
   const [user, setRecoilUser] = useRecoilState(userAtom);
+  const localStorageUserId =
+    typeof window !== `undefined` ? localStorage.getItem(`userId`) : false;
+  const isAuthed = Boolean(userId || localStorageUserId);
 
   const wrapSetUserId = (newUserId: string | null) => {
     if (newUserId === null) {
@@ -53,5 +56,6 @@ export const useUser = () => {
     userId,
     setUser,
     setUserId: wrapSetUserId,
+    isAuthed,
   };
 };

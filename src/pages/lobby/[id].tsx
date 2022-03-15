@@ -1,8 +1,10 @@
 import Layout from '@/components/Layout';
+import { useUser } from '@/hooks/useUser';
 import { db } from '@/services/database';
 import { ref } from 'firebase/database';
 import { GetServerSideProps, InferGetServerSidePropsType } from 'next';
-import React from 'react';
+import { useRouter } from 'next/router';
+import React, { useEffect } from 'react';
 import { Container } from 'react-bootstrap';
 import { useObject } from 'react-firebase-hooks/database';
 
@@ -10,6 +12,14 @@ const Lobby = ({
   tournamentId,
 }: InferGetServerSidePropsType<typeof getServerSideProps>) => {
   const [tournament] = useObject(ref(db, `tournament/${tournamentId}`));
+  const { isAuthed } = useUser();
+  const router = useRouter();
+
+  useEffect(() => {
+    if (!isAuthed) {
+      router.push(`/login`);
+    }
+  }, [isAuthed, router]);
 
   return (
     <Layout>
@@ -20,6 +30,7 @@ const Lobby = ({
         <h3>Gracze</h3>
         <ul>
           {tournament &&
+            tournament?.val().players &&
             Object.keys(tournament?.val().players).map((nickname) => (
               <li key={nickname}>{nickname}</li>
             ))}
