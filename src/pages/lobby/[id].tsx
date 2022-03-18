@@ -1,7 +1,7 @@
 import Layout from '@/components/Layout';
 import { useUser } from '@/hooks/useUser';
 import { db } from '@/services/database';
-import { ref } from 'firebase/database';
+import { onChildAdded, ref, remove } from 'firebase/database';
 import { GetServerSideProps, InferGetServerSidePropsType } from 'next';
 import { useRouter } from 'next/router';
 import React, { useEffect } from 'react';
@@ -12,8 +12,33 @@ const Lobby = ({
   tournamentId,
 }: InferGetServerSidePropsType<typeof getServerSideProps>) => {
   const [tournament] = useObject(ref(db, `tournament/${tournamentId}`));
-  const { isAuthed } = useUser();
+  const { isAuthed, userId } = useUser();
   const router = useRouter();
+
+  useEffect(() => {
+    const tournamentVal = tournament?.val();
+
+    if (!tournamentVal || !userId) return;
+
+    const players = tournamentVal.players;
+
+    if (!players || !Object.keys(players).includes(userId)) {
+      router.push(`/`);
+    }
+  }, [router, tournament, userId]);
+
+  useEffect(() => {
+    const handleRouteChange = (url: string) => {
+      if (!url.startsWith(`/game`)) {
+        const userRef = ref(db, `tournament/${tournamentId}/players/${userId}`);
+        remove(userRef);
+      }
+    };
+    router.events.on(`routeChangeStart`, handleRouteChange);
+    return () => {
+      router.events.off(`routeChangeStart`, handleRouteChange);
+    };
+  }, [router.events, tournamentId, userId]);
 
   useEffect(() => {
     if (!isAuthed) {
@@ -21,12 +46,18 @@ const Lobby = ({
     }
   }, [isAuthed, router]);
 
+  useEffect(() => {
+    const gameRef = ref(db, `games/${tournamentId}`);
+    const unsubscribe = onChildAdded(gameRef, (game) => {
+      router.push(`/game/${tournamentId.replaceAll(` `, `-`)}/${game.key}`);
+    });
+    return () => unsubscribe();
+  }, [router, tournamentId]);
+
   return (
     <Layout>
       <Container>
         <h1>{tournamentId}</h1>
-        <div>Lobby {tournamentId}</div>
-        <pre>{JSON.stringify(tournament?.val())}</pre>
         <h3>Gracze</h3>
         <ul>
           {tournament &&

@@ -10,6 +10,10 @@ import { useRouter } from 'next/router';
 import { GetStaticProps } from 'next';
 import { useUser } from '@/hooks/useUser';
 
+const capitalizeFirstLetter = (text: string) => {
+  return text.charAt(0).toUpperCase() + text.slice(1);
+};
+
 const Login = ({ images }: { images: Images }) => {
   const users = useRecoilValue(userListAtom);
   const [showUsers, setShowUsers] = useState(false);
@@ -45,8 +49,8 @@ const Login = ({ images }: { images: Images }) => {
 
   return (
     <Container className="mt-5 text-center">
-      <h1>Choose your character!</h1>
-      <div className="d-flex flex-column justify-content-center align-items-center">
+      <h1>Kim jesteś mordeczko 🤔</h1>
+      <div className="d-flex justify-content-center align-items-center flex-wrap">
         {showUsers && users ? (
           Object.entries(users).map(([id, user]) => (
             <UserInfo
@@ -69,7 +73,8 @@ const Login = ({ images }: { images: Images }) => {
           <Modal.Title>Uwaga</Modal.Title>
         </Modal.Header>
         <Modal.Body>
-          Wybrałxś <b>{selectedUser}</b>. To na pewno Ty?
+          Wybrał_ś <b>{capitalizeFirstLetter(selectedUser || ``)}</b>. To na
+          pewno Ty?
         </Modal.Body>
         <Modal.Footer>
           <Button
@@ -105,7 +110,7 @@ export const getStaticProps: GetStaticProps = async () => {
 
   const images = (await cloudinary.v2.api.resources(
     {
-      max_results: 10,
+      max_results: 15,
       type: `upload`,
       prefix: `users`,
     },

@@ -12,17 +12,19 @@ const CustomNavbar = () => {
   return (
     <Navbar bg="light" variant="light">
       <Container>
-        <NextLink href="/">
-          <NextImage
-            className="me-auto"
-            src="/logo.png"
-            height={37}
-            width={174}
-            quality={100}
-          />
+        <NextLink href="/" passHref>
+          <a>
+            <NextImage
+              className="me-auto"
+              src="/logo.png"
+              height={37}
+              width={174}
+              quality={100}
+            />
+          </a>
         </NextLink>
         <Nav className="ms-auto">
-          <Nav.Link href="#home">{user && user.nickname}</Nav.Link>
+          <Nav.Link>{user && user.nickname}</Nav.Link>
           <Button
             onClick={() => {
               setUserId(null);

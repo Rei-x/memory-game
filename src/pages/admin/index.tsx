@@ -16,6 +16,7 @@ import { useSignInWithGithub, useAuthState } from 'react-firebase-hooks/auth';
 import { useList } from 'react-firebase-hooks/database';
 import Randomstring from 'randomstring';
 import { useRouter } from 'next/router';
+import NextLink from 'next/link';
 
 const Dashboard = () => {
   const [signInWithGithub] = useSignInWithGithub(auth);
@@ -76,7 +77,14 @@ const Dashboard = () => {
         <ul>
           {tournaments?.map((data) => (
             <li key={data.key}>
-              <h5 className="mt-3">{data.key}</h5>
+              <NextLink
+                href={`/admin/tournament/${data.key?.replaceAll(` `, `-`)}`}
+                passHref
+              >
+                <a>
+                  <h5 className="mt-3">{data.key}</h5>
+                </a>
+              </NextLink>
               <pre>{JSON.stringify(data.val())}</pre>
               {data.val().isStarted ? (
                 <Button onClick={() => stopGame(data.key || ``)}>Stop</Button>

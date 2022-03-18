@@ -1,26 +1,28 @@
-import { selectedCards as selectedCardsSelector } from '@/atoms/Card.atom';
+import {
+  correctCardsAtom,
+  selectedCards as selectedCardsSelector,
+} from '@/atoms/Card.atom';
+import { isWinAtom } from '@/atoms/IsWin.atom';
 import { useCards } from '@/hooks/useCards';
 import { useCheckForWin } from '@/hooks/useCheckForWin';
 import { Images } from '@/types/cloudinaryImages';
 import React, { useEffect } from 'react';
 import { Container } from 'react-bootstrap';
-import { useRecoilState } from 'recoil';
-import seedrandom from 'seedrandom';
+import { useRecoilState, useRecoilValue, useSetRecoilState } from 'recoil';
 import Card from './Card';
 
-const shuffleArray = (array: any[]) => {
-  const rng = seedrandom(`luigi`);
-  const newArray = JSON.parse(JSON.stringify(array)) as any[];
-  newArray.sort(() => 0.5 - rng());
-  return newArray;
-};
-
-const Board = ({ images }: { images: Images }) => {
-  const [cards, setCards] = useCards(images);
+const Board = ({ images, seed }: { images: Images; seed: string }) => {
+  const [cards] = useCards(images, seed);
   const [selectedCards, setSelectedCards] = useRecoilState(
     selectedCardsSelector,
   );
+  const correctCards = useRecoilValue(correctCardsAtom);
   const isWin = useCheckForWin(cards);
+  const setWin = useSetRecoilState(isWinAtom);
+
+  useEffect(() => {
+    setWin(isWin);
+  }, [isWin, setWin]);
 
   useEffect(() => {
     if (selectedCards.first !== null && selectedCards.second !== null) {
@@ -34,11 +36,8 @@ const Board = ({ images }: { images: Images }) => {
   }, [selectedCards.first, selectedCards.second, setSelectedCards]);
 
   return (
-    <Container>
-      <button onClick={() => setCards((cards) => shuffleArray(cards))}>
-        shuffle cards
-      </button>
-      <Container className="d-flex flex-wrap">
+    <Container className="mx-auto">
+      <Container className="d-flex flex-wrap mx-auto justify-content-center overflow-hidden">
         {cards.map((image) => (
           <Card key={image.asset_id} image={image} />
         ))}

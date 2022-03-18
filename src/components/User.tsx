@@ -45,7 +45,7 @@ const UserInfo = ({
         duration: 0.2,
       }}
       variants={variants}
-      className={`rounded mt-3 d-flex flex-column align-items-center`}
+      className={`rounded mt-3 m-3 d-flex flex-column align-items-center`}
     >
       <NextImage
         src={url}
