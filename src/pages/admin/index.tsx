@@ -3,15 +3,19 @@ import { db } from '@/services/database';
 import {
   equalTo,
   orderByChild,
+  push,
   query,
   ref,
   remove,
+  serverTimestamp,
   update,
 } from 'firebase/database';
 import React from 'react';
 import { Button, Container } from 'react-bootstrap';
 import { useSignInWithGithub, useAuthState } from 'react-firebase-hooks/auth';
 import { useList } from 'react-firebase-hooks/database';
+import Randomstring from 'randomstring';
+import { useRouter } from 'next/router';
 
 const Dashboard = () => {
   const [signInWithGithub] = useSignInWithGithub(auth);
@@ -20,21 +24,45 @@ const Dashboard = () => {
   const [onlineUsers] = useList(
     query(ref(db, `users`), orderByChild(`isOnline`), equalTo(true)),
   );
+  const router = useRouter();
 
   if (!user) {
     return <Button onClick={() => signInWithGithub()}>Zaloguj</Button>;
   }
 
-  const startGame = (tournamentId: string) => {
+  const startGame = async (tournamentId: string) => {
     const tournament = ref(db, `tournament/${tournamentId}`);
-    update(tournament, {
+    await update(tournament, {
       isStarted: true,
     });
+    const gamesRef = ref(db, `games/${tournamentId}`);
+
+    const playersNames = Object.keys(
+      tournaments?.find((tournament) => tournament.key === tournamentId)?.val()
+        .players,
+    );
+
+    const players: Record<string, any> = {};
+    playersNames.forEach((playerName) => {
+      players[playerName] = {
+        score: 0,
+      };
+    });
+
+    await push(gamesRef, {
+      seed: Randomstring.generate(10),
+      players: players,
+      started: serverTimestamp(),
+      size: 10,
+      hasEnded: false,
+    });
+
+    await router.push(`/admin/tournament/${tournamentId.replaceAll(` `, `-`)}`);
   };
 
-  const stopGame = (tournamentId: string) => {
+  const stopGame = async (tournamentId: string) => {
     const tournament = ref(db, `tournament/${tournamentId}`);
-    update(tournament, {
+    await update(tournament, {
       isStarted: false,
     });
   };
@@ -60,7 +88,8 @@ const Dashboard = () => {
                 {data.val().players &&
                   Object.keys(data.val().players).map((user) => (
                     <li className="mt-2" key={user}>
-                      {user}{' '}
+                      {user}
+                      {` `}
                       <Button
                         onClick={() => {
                           const userRef = ref(
