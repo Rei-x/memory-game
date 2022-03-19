@@ -64,7 +64,7 @@ const Scoreboard = ({ tournamentId }: { tournamentId: string }) => {
 
   return (
     <div>
-      <h1>Tabela</h1>
+      <h2>Tabela</h2>
       {game && (
         <>
           <Table striped bordered hover>

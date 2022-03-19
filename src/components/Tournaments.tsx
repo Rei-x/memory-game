@@ -52,12 +52,26 @@ const Tournaments = () => {
                     ))}
                 </AnimatePresence>
               </div>
-              <Button
-                onClick={() => joinTournament(snapshot.key || `luigi`)}
-                className="mt-3"
-              >
-                Dołącz
-              </Button>
+              {snapshot.val().isStarted ? (
+                <Button
+                  className="mt-3"
+                  variant="success"
+                  onClick={() => {
+                    router.push(
+                      `/scoreboard/${snapshot.key?.replaceAll(` `, `-`)}`,
+                    );
+                  }}
+                >
+                  Tabela
+                </Button>
+              ) : (
+                <Button
+                  onClick={() => joinTournament(snapshot.key || `luigi`)}
+                  className="mt-3"
+                >
+                  Dołącz
+                </Button>
+              )}
             </div>
           );
         })}
