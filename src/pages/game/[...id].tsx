@@ -94,7 +94,7 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
     };
   }
 
-  const tournamentId = id[0].replaceAll(`-`, ` `);
+  const tournamentId = id[0].replace(/-/i, ` `);
   const gameId = id[1];
 
   const gameRef = ref(db, `games/${tournamentId}/${gameId}/size`);
