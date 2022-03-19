@@ -38,7 +38,6 @@ const Tournaments = () => {
                 {snapshot.val().players &&
                   Object.keys(snapshot.val().players).join(`, `)}
               </p>
-              <pre>{JSON.stringify(snapshot.val())}</pre>
               <Button onClick={() => joinTournament(snapshot.key || `luigi`)}>
                 Dołącz
               </Button>

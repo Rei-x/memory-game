@@ -22,12 +22,19 @@ const Board = ({ images, seed }: { images: Images; seed: string }) => {
 
   useEffect(() => {
     if (selectedCards.first !== null && selectedCards.second !== null) {
-      setTimeout(() => {
+      if (selectedCards.first.url === selectedCards.second.url) {
         setSelectedCards({
           first: null,
           second: null,
         });
-      }, 500);
+      } else {
+        setTimeout(() => {
+          setSelectedCards({
+            first: null,
+            second: null,
+          });
+        }, 500);
+      }
     }
   }, [selectedCards.first, selectedCards.second, setSelectedCards]);
 
