@@ -2,11 +2,13 @@ import Layout from '@/components/Layout';
 import { useUser } from '@/hooks/useUser';
 import { db } from '@/services/database';
 import { onChildAdded, ref, remove } from 'firebase/database';
+import { AnimatePresence } from 'framer-motion';
 import { GetServerSideProps, InferGetServerSidePropsType } from 'next';
 import { useRouter } from 'next/router';
 import React, { useEffect } from 'react';
 import { Container } from 'react-bootstrap';
 import { useObject } from 'react-firebase-hooks/database';
+import { motion } from 'framer-motion';
 
 const Lobby = ({
   tournamentId,
@@ -60,14 +62,26 @@ const Lobby = ({
     <Layout>
       <Container>
         <h1>{tournamentId}</h1>
-        <h3>Gracze</h3>
-        <ul>
-          {tournament &&
-            tournament?.val().players &&
-            Object.keys(tournament?.val().players).map((nickname) => (
-              <li key={nickname}>{nickname}</li>
-            ))}
-        </ul>
+        <p>Czekamy na resztę graczy..</p>
+        <div className="d-flex flex-wrap" style={{ gap: `10px` }}>
+          <AnimatePresence>
+            {tournament &&
+              tournament?.val().players &&
+              Object.keys(tournament?.val().players).map((nickname) => (
+                <motion.div
+                  layout
+                  key={nickname}
+                  initial={{ opacity: 0, scale: 0 }}
+                  transition={{ duration: 0.5 }}
+                  animate={{ opacity: 1, scale: 1 }}
+                  exit={{ opacity: 0, scale: 0 }}
+                  layoutId={nickname}
+                >
+                  <b>{nickname}</b>
+                </motion.div>
+              ))}
+          </AnimatePresence>
+        </div>
       </Container>
     </Layout>
   );

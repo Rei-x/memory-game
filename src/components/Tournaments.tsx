@@ -5,6 +5,7 @@ import { useRouter } from 'next/router';
 import React, { useEffect } from 'react';
 import { Button } from 'react-bootstrap';
 import { useList } from 'react-firebase-hooks/database';
+import { AnimatePresence, motion } from 'framer-motion';
 
 const Tournaments = () => {
   const [tournaments] = useList(
@@ -31,14 +32,30 @@ const Tournaments = () => {
         tournaments?.map((snapshot) => {
           return (
             <div key={snapshot.key}>
-              <hr />
               <h3>{snapshot.key}</h3>
-              <p>
-                Gracze: <br />
-                {snapshot.val().players &&
-                  Object.keys(snapshot.val().players).join(`, `)}
-              </p>
-              <Button onClick={() => joinTournament(snapshot.key || `luigi`)}>
+              <p>Gracze</p>
+              <div className="d-flex flex-wrap" style={{ gap: `10px` }}>
+                <AnimatePresence>
+                  {snapshot.val().players &&
+                    Object.keys(snapshot.val().players).map((playerName) => (
+                      <motion.div
+                        layout
+                        key={playerName}
+                        initial={{ opacity: 0, scale: 0 }}
+                        transition={{ duration: 0.5 }}
+                        animate={{ opacity: 1, scale: 1 }}
+                        exit={{ opacity: 0, scale: 0 }}
+                        layoutId={playerName}
+                      >
+                        <b>{playerName} </b>
+                      </motion.div>
+                    ))}
+                </AnimatePresence>
+              </div>
+              <Button
+                onClick={() => joinTournament(snapshot.key || `luigi`)}
+                className="mt-3"
+              >
                 Dołącz
               </Button>
             </div>

@@ -14,7 +14,7 @@ const Loser = ({ tournamentId }: { tournamentId: string }) => {
         {` `}
         Dzięki za gierkę <b>{capitalizeFirstLetter(userId || ``)}</b>
       </h1>
-      <p>Możesz wejść tutaj, żeby oglądać tabele wyników z turnieju:</p>
+      <p>Tutaj masz na bieżąco wyniki</p>
       <Scoreboard tournamentId={tournamentId} />
     </Layout>
   );

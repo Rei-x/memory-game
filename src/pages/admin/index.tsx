@@ -8,6 +8,7 @@ import {
   ref,
   remove,
   serverTimestamp,
+  set,
   update,
 } from 'firebase/database';
 import React from 'react';
@@ -54,7 +55,7 @@ const Dashboard = () => {
       seed: Randomstring.generate(10),
       players: players,
       started: serverTimestamp(),
-      size: 2,
+      size: 10,
       hasEnded: false,
     });
 
@@ -91,6 +92,39 @@ const Dashboard = () => {
               ) : (
                 <Button onClick={() => startGame(data.key || ``)}>Start</Button>
               )}
+              <Button
+                variant="success"
+                className="ms-3"
+                onClick={() => {
+                  if (data.key) {
+                    const canBeJoined = ref(
+                      db,
+                      `tournament/${data.key}/canBeJoin`,
+                    );
+                    set(canBeJoined, true);
+                  }
+                }}
+              >
+                Włącz dołączanie
+              </Button>
+              <Button
+                variant="danger ms-3"
+                onClick={() => {
+                  if (confirm(`Na pewno chcesz go usunąć?`) && data.key) {
+                    const gamesRef = ref(db, `games/${data.key}`);
+                    const winnersRef = ref(db, `winners/${data.key}`);
+                    const playersRef = ref(
+                      db,
+                      `tournament/${data.key}/players`,
+                    );
+                    remove(gamesRef);
+                    remove(winnersRef);
+                    remove(playersRef);
+                  }
+                }}
+              >
+                Usuń
+              </Button>
               <h6>Gracze</h6>
               <ul>
                 {data.val().players &&
