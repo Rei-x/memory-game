@@ -41,7 +41,6 @@ const Scoreboard = ({ tournamentId }: { tournamentId: string }) => {
             };
           })
           .sort((a, b) => {
-            console.log(a, b);
             if (a.score > b.score) return -1;
             if (a.score < b.score) return 1;
             if (a?.ended && !b?.ended) return -1;
