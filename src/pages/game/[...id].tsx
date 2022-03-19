@@ -117,9 +117,9 @@ const Game = ({
       const isPlayerInNewGame = Object.keys(game.val().players).includes(
         userId,
       );
-      const hasJoinedAlready = !!game.val().players[userId].hasJoined;
 
       if (isPlayerInNewGame) {
+        const hasJoinedAlready = !!game.val().players[userId].hasJoined;
         if (!hasJoinedAlready) {
           resetWin();
           resetCorrectCards();
