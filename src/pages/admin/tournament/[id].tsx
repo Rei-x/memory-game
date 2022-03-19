@@ -1,5 +1,5 @@
 import { db } from '@/services/database';
-import { ref, serverTimestamp, push, remove } from 'firebase/database';
+import { ref, serverTimestamp, push, remove, set } from 'firebase/database';
 import { GetServerSideProps } from 'next';
 import React, { useState } from 'react';
 import { Button, Container } from 'react-bootstrap';
@@ -76,6 +76,18 @@ const Tournament = ({ tournamentId }: { tournamentId: string }) => {
                       }
                     >
                       Dodaj
+                    </Button>
+                    <Button
+                      variant="success"
+                      className="ms-2"
+                      onClick={() => {
+                        const winnersRef = ref(db, `winners/${tournamentId}`);
+                        if (confirm(`Czy ${playerName} wygrał?`)) {
+                          set(winnersRef, playerName);
+                        }
+                      }}
+                    >
+                      Wygrał
                     </Button>
                   </li>
                 ),

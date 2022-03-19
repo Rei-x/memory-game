@@ -10,7 +10,7 @@ const Loser = () => {
   return (
     <Layout>
       <h1>
-        {' '}
+        {` `}
         Dzięki za gierkę <b>{capitalizeFirstLetter(userId || ``)}</b>
       </h1>
       <p>Możesz wejść tutaj, żeby oglądać tabele wyników z turnieju:</p>

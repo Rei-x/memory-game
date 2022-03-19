@@ -12,7 +12,7 @@ import {
 } from 'firebase/database';
 import { GetServerSideProps } from 'next';
 import React, { useEffect, useState } from 'react';
-import { useObject } from 'react-firebase-hooks/database';
+import { useObject, useObjectVal } from 'react-firebase-hooks/database';
 import cloudinary from 'cloudinary';
 import { Images } from '@/types/cloudinaryImages';
 import Board from '@/components/Board';
@@ -33,17 +33,20 @@ const Game = ({
   gameId: string;
   images: Images;
 }) => {
+  const { userId } = useUser();
+  const [isEverybodyJoined, setIsEverybodyJoined] = useState(false);
+  const [showConfetti, setShowConfetti] = useState(false);
+  const router = useRouter();
+
   const gameRef = ref(db, `games/${tournamentId}/${gameId}`);
   const [game, loading] = useObject(gameRef);
-  const [isEverybodyJoined, setIsEverybodyJoined] = useState(false);
-  const { userId } = useUser();
   const [player, playerLoading] = useObject(
     ref(db, `games/${tournamentId}/${gameId}/players/${userId}`),
   );
+  const [winner] = useObjectVal(ref(db, `winners/${tournamentId}`));
+
   const correctCards = useRecoilValue(correctCardsAtom);
   const [isWin, setIsWin] = useRecoilState(isWinAtom);
-  const [showConfetti, setShowConfetti] = useState(false);
-  const router = useRouter();
 
   const resetCorrectCards = useResetRecoilState(correctCardsAtom);
   const resetWin = useResetRecoilState(isWinAtom);
@@ -146,6 +149,12 @@ const Game = ({
     userId,
   ]);
 
+  useEffect(() => {
+    if (winner) {
+      router.push(`/winner/${tournamentId}`);
+    }
+  }, [router, tournamentId, winner]);
+
   if (loading || !game || playerLoading) {
     return <LoadingScreen />;
   }
@@ -220,7 +229,7 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
     {
       max_results: size,
       type: `upload`,
-      prefix: `cats`,
+      prefix: `kajtek`,
     },
     (err, result) => result,
   )) as Images;
