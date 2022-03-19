@@ -1,19 +1,13 @@
 import { db } from '@/services/database';
-import {
-  orderByKey,
-  query,
-  ref,
-  serverTimestamp,
-  push,
-} from 'firebase/database';
+import { ref, serverTimestamp, push, remove } from 'firebase/database';
 import { GetServerSideProps } from 'next';
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import { Button, Container } from 'react-bootstrap';
-import { useList, useObject } from 'react-firebase-hooks/database';
+import { useList } from 'react-firebase-hooks/database';
 import Randomstring from 'randomstring';
+import Scoreboard from '@/components/Scoreboard';
 
 const Tournament = ({ tournamentId }: { tournamentId: string }) => {
-  const [tournament] = useObject(ref(db, `tournament/${tournamentId}`));
   const [games] = useList(ref(db, `games/${tournamentId}`));
   const gamesRef = ref(db, `games/${tournamentId}`);
   const [playersInNextGame, setPlayersInNextGame] = useState<string[]>([]);
@@ -46,6 +40,15 @@ const Tournament = ({ tournamentId }: { tournamentId: string }) => {
               <hr />
               <h3>{game.key}</h3>
               <pre>{JSON.stringify(game.val())}</pre>
+              <Button
+                className="mb-3"
+                onClick={() => {
+                  const gameRef = ref(db, `games/${tournamentId}/${game.key}`);
+                  remove(gameRef);
+                }}
+              >
+                Usuń
+              </Button>
             </div>
           ))}
         {games && games?.length > 0 && (
@@ -102,6 +105,7 @@ const Tournament = ({ tournamentId }: { tournamentId: string }) => {
           </div>
         )}
       </div>
+      <Scoreboard tournamentId={tournamentId} />
     </Container>
   );
 };

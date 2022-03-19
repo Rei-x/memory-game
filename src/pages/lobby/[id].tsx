@@ -48,8 +48,10 @@ const Lobby = ({
 
   useEffect(() => {
     const gameRef = ref(db, `games/${tournamentId}`);
-    const unsubscribe = onChildAdded(gameRef, (game) => {
-      router.push(`/game/${tournamentId.replaceAll(` `, `-`)}/${game.key}`);
+    const unsubscribe = onChildAdded(gameRef, (game, previousGame) => {
+      if (!previousGame) {
+        router.push(`/game/${tournamentId.replaceAll(` `, `-`)}/${game.key}`);
+      }
     });
     return () => unsubscribe();
   }, [router, tournamentId]);

@@ -2,17 +2,27 @@ import Countdown from '@/components/Countdown';
 import LoadingScreen from '@/components/LoadingScreen';
 import { useUser } from '@/hooks/useUser';
 import { db } from '@/services/database';
-import { get, onValue, ref, serverTimestamp, set } from 'firebase/database';
+import {
+  get,
+  onChildAdded,
+  onValue,
+  ref,
+  serverTimestamp,
+  set,
+} from 'firebase/database';
 import { GetServerSideProps } from 'next';
 import React, { useEffect, useState } from 'react';
 import { useObject } from 'react-firebase-hooks/database';
 import cloudinary from 'cloudinary';
 import { Images } from '@/types/cloudinaryImages';
 import Board from '@/components/Board';
-import { Container } from 'react-bootstrap';
-import { useRecoilValue } from 'recoil';
-import { correctCardsAtom } from '@/atoms/Card.atom';
+import { Container, Spinner } from 'react-bootstrap';
+import { useRecoilValue, useRecoilState, useResetRecoilState } from 'recoil';
+import { correctCardsAtom, selectedCards } from '@/atoms/Card.atom';
 import { isWinAtom } from '@/atoms/IsWin.atom';
+import Confetti from 'react-confetti';
+import { AnimatePresence, motion } from 'framer-motion';
+import { useRouter } from 'next/router';
 
 const Game = ({
   tournamentId,
@@ -27,8 +37,24 @@ const Game = ({
   const [game, loading] = useObject(gameRef);
   const [isEverybodyJoined, setIsEverybodyJoined] = useState(false);
   const { userId } = useUser();
+  const [player, playerLoading] = useObject(
+    ref(db, `games/${tournamentId}/${gameId}/players/${userId}`),
+  );
   const correctCards = useRecoilValue(correctCardsAtom);
-  const isWin = useRecoilValue(isWinAtom);
+  const [isWin, setIsWin] = useRecoilState(isWinAtom);
+  const [showConfetti, setShowConfetti] = useState(false);
+  const router = useRouter();
+
+  const resetCorrectCards = useResetRecoilState(correctCardsAtom);
+  const resetWin = useResetRecoilState(isWinAtom);
+  const resetSelectedCards = useResetRecoilState(selectedCards);
+
+  useEffect(() => {
+    if (isWin) {
+      setShowConfetti(true);
+      setTimeout(() => setShowConfetti(false), 2000);
+    }
+  }, [isWin]);
 
   useEffect(() => {
     const hasJoinedRef = ref(
@@ -39,22 +65,27 @@ const Game = ({
   }, [gameId, tournamentId, userId]);
 
   useEffect(() => {
+    if (player?.child(`ended`).exists()) return;
     const scoreRef = ref(
       db,
       `games/${tournamentId}/${gameId}/players/${userId}/score`,
     );
     set(scoreRef, correctCards.length / 2);
-  }, [correctCards, gameId, tournamentId, userId]);
+  }, [correctCards, gameId, player, tournamentId, userId]);
 
   useEffect(() => {
     const endedRef = ref(
       db,
       `games/${tournamentId}/${gameId}/players/${userId}/ended`,
     );
-    if (isWin) {
-      set(endedRef, serverTimestamp());
-    }
-  }, [gameId, isWin, tournamentId, userId]);
+
+    const setEndTime = async () => {
+      if (isWin && !player?.child(`ended`).exists()) {
+        set(endedRef, serverTimestamp());
+      }
+    };
+    setEndTime();
+  }, [gameId, isWin, player, tournamentId, userId]);
 
   useEffect(() => {
     const playersRef = ref(db, `games/${tournamentId}/${gameId}/players`);
@@ -67,7 +98,55 @@ const Game = ({
     return () => unsubscribe();
   }, [gameId, tournamentId]);
 
-  if (loading || !game) {
+  useEffect(() => {
+    if (player?.child(`ended`).exists()) {
+      setIsWin(true);
+    }
+  }, [player, setIsWin]);
+
+  useEffect(() => {
+    const gamesRef = ref(db, `games/${tournamentId}`);
+    const unsubscribe = onChildAdded(gamesRef, async (game, previousGame) => {
+      const sortedArray = [game.key, previousGame].sort();
+      const newestGame = sortedArray[1];
+      if (!userId) return;
+      if (newestGame === gameId) return;
+      const isPlayerInNewGame = Object.keys(game.val().players).includes(
+        userId,
+      );
+      const hasJoinedAlready = !!game.val().players[userId].hasJoined;
+
+      if (isPlayerInNewGame) {
+        if (!hasJoinedAlready) {
+          resetWin();
+          resetCorrectCards();
+          resetSelectedCards();
+          setShowConfetti(false);
+          await router.push(
+            `/game/${tournamentId.replaceAll(` `, `-`)}/${game.key}`,
+          );
+          return;
+        }
+      } else {
+        resetWin();
+        resetCorrectCards();
+        resetSelectedCards();
+        setShowConfetti(false);
+        await router.push(`/loser/${tournamentId.replaceAll(` `, `-`)}`);
+      }
+    });
+    return () => unsubscribe();
+  }, [
+    gameId,
+    resetCorrectCards,
+    resetSelectedCards,
+    resetWin,
+    router,
+    tournamentId,
+    userId,
+  ]);
+
+  if (loading || !game || playerLoading) {
     return <LoadingScreen />;
   }
 
@@ -77,9 +156,40 @@ const Game = ({
 
   return (
     <>
-      <Countdown />
       <Container className="mt-5 mx-auto">
-        <Board images={images} seed={game?.val().seed} />
+        <Confetti run={isWin} recycle={showConfetti} />
+        <AnimatePresence>
+          {!isWin && (
+            <motion.div
+              layout
+              key="board"
+              initial={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+            >
+              <Countdown />
+              <Board images={images} seed={game?.val().seed} />
+            </motion.div>
+          )}
+          {isWin && (
+            <motion.div
+              layout
+              key="win"
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+            >
+              <div className="text-center">
+                <h1>Wygrał_ś!!!</h1>
+                <div>Czekaj na następną grę..</div>
+                <Spinner
+                  className="mt-3"
+                  animation="border"
+                  variant="primary"
+                />
+              </div>
+            </motion.div>
+          )}
+        </AnimatePresence>
       </Container>
     </>
   );

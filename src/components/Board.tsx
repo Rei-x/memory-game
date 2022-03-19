@@ -1,14 +1,11 @@
-import {
-  correctCardsAtom,
-  selectedCards as selectedCardsSelector,
-} from '@/atoms/Card.atom';
+import { selectedCards as selectedCardsSelector } from '@/atoms/Card.atom';
 import { isWinAtom } from '@/atoms/IsWin.atom';
 import { useCards } from '@/hooks/useCards';
 import { useCheckForWin } from '@/hooks/useCheckForWin';
 import { Images } from '@/types/cloudinaryImages';
 import React, { useEffect } from 'react';
 import { Container } from 'react-bootstrap';
-import { useRecoilState, useRecoilValue, useSetRecoilState } from 'recoil';
+import { useRecoilState, useSetRecoilState } from 'recoil';
 import Card from './Card';
 
 const Board = ({ images, seed }: { images: Images; seed: string }) => {
@@ -16,7 +13,6 @@ const Board = ({ images, seed }: { images: Images; seed: string }) => {
   const [selectedCards, setSelectedCards] = useRecoilState(
     selectedCardsSelector,
   );
-  const correctCards = useRecoilValue(correctCardsAtom);
   const isWin = useCheckForWin(cards);
   const setWin = useSetRecoilState(isWinAtom);
 
@@ -42,7 +38,6 @@ const Board = ({ images, seed }: { images: Images; seed: string }) => {
           <Card key={image.asset_id} image={image} />
         ))}
       </Container>
-      {isWin && <div>Wygrałeś!!</div>}
     </Container>
   );
 };

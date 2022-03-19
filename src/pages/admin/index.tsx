@@ -54,7 +54,7 @@ const Dashboard = () => {
       seed: Randomstring.generate(10),
       players: players,
       started: serverTimestamp(),
-      size: 10,
+      size: 2,
       hasEnded: false,
     });
 

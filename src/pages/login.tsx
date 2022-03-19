@@ -9,10 +9,7 @@ import { selectedUserAtom } from '@/atoms/SelectedUser.atom';
 import { useRouter } from 'next/router';
 import { GetStaticProps } from 'next';
 import { useUser } from '@/hooks/useUser';
-
-const capitalizeFirstLetter = (text: string) => {
-  return text.charAt(0).toUpperCase() + text.slice(1);
-};
+import { capitalizeFirstLetter } from '@/utils/capitalizeFirstLetter';
 
 const Login = ({ images }: { images: Images }) => {
   const users = useRecoilValue(userListAtom);

@@ -5,10 +5,7 @@ import styles from './User.module.scss';
 import { useSetRecoilState } from 'recoil';
 import { selectedUserAtom } from '@/atoms/SelectedUser.atom';
 import { motion } from 'framer-motion';
-
-const capitalizeFirstLetter = (text: string) => {
-  return text.charAt(0).toUpperCase() + text.slice(1);
-};
+import { capitalizeFirstLetter } from '@/utils/capitalizeFirstLetter';
 
 const variants = {
   online: {
