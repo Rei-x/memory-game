@@ -117,6 +117,11 @@ const Dashboard = () => {
                       db,
                       `tournament/${data.key}/players`,
                     );
+                    const isStartedRef = ref(
+                      db,
+                      `tournament/${data.key}/isStarted`,
+                    );
+                    set(isStartedRef, false);
                     remove(gamesRef);
                     remove(winnersRef);
                     remove(playersRef);
