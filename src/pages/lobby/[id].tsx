@@ -62,7 +62,7 @@ const Lobby = ({
     <Layout>
       <Container>
         <h1>{tournamentId}</h1>
-        <p>Czekamy na resztę graczy..</p>
+        <p>Waiting for others players..</p>
         <div className="d-flex flex-wrap" style={{ gap: `10px` }}>
           <AnimatePresence>
             {tournament &&

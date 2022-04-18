@@ -33,7 +33,7 @@ const Tournaments = () => {
           return (
             <div key={snapshot.key}>
               <h3>{snapshot.key}</h3>
-              <p>Gracze</p>
+              <p>Players</p>
               <div className="d-flex flex-wrap" style={{ gap: `10px` }}>
                 <AnimatePresence>
                   {snapshot.val().players &&
@@ -62,14 +62,14 @@ const Tournaments = () => {
                     );
                   }}
                 >
-                  Tabela
+                  Tabel
                 </Button>
               ) : (
                 <Button
                   onClick={() => joinTournament(snapshot.key || `luigi`)}
                   className="mt-3"
                 >
-                  Dołącz
+                  Join
                 </Button>
               )}
             </div>

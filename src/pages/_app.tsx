@@ -7,11 +7,8 @@ export default function MyApp({ Component, pageProps }: AppProps) {
   return (
     <RecoilRoot>
       <Head>
-        <title>kajtekparty 🎉</title>
-        <meta
-          name="description"
-          content="Wszystkiego najlepszego kajtek 🥳🥳"
-        />
+        <title>Fancy memory 🎉</title>
+        <meta name="description" content="Memory game 😎" />
         <link
           rel="apple-touch-icon"
           sizes="180x180"

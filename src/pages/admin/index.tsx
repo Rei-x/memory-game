@@ -71,10 +71,10 @@ const Dashboard = () => {
 
   return (
     <Container className="mt-5">
-      <h1>Panel admina</h1>
+      <h1>Admin panel</h1>
       <pre>{JSON.stringify(user)}</pre>
       <div>
-        <h3>Turnieje</h3>
+        <h3>Tournaments</h3>
         <ul>
           {tournaments?.map((data) => (
             <li key={data.key}>
@@ -105,7 +105,7 @@ const Dashboard = () => {
                   }
                 }}
               >
-                Włącz dołączanie
+                Turn on joining
               </Button>
               <Button
                 variant="danger ms-3"
@@ -128,9 +128,9 @@ const Dashboard = () => {
                   }
                 }}
               >
-                Usuń
+                Delete
               </Button>
-              <h6>Gracze</h6>
+              <h6>Players</h6>
               <ul>
                 {data.val().players &&
                   Object.keys(data.val().players).map((user) => (
@@ -146,7 +146,7 @@ const Dashboard = () => {
                           remove(userRef);
                         }}
                       >
-                        Wyrzuć
+                        Kick
                       </Button>
                     </li>
                   ))}
@@ -154,7 +154,7 @@ const Dashboard = () => {
             </li>
           ))}
         </ul>
-        <h3>Zalogowani</h3>
+        <h3>Logged in</h3>
         <ul>
           {onlineUsers?.map((user) => (
             <li key={user.key}>
@@ -168,7 +168,7 @@ const Dashboard = () => {
                   });
                 }}
               >
-                Wyloguj
+                Logout
               </Button>
             </li>
           ))}

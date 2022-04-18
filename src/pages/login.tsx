@@ -21,7 +21,7 @@ const Login = ({ images }: { images: Images }) => {
 
   const getImageUrl = (username: string) => {
     return images.resources.find((image) =>
-      image.public_id.startsWith(`users/${username}`),
+      image.public_id.startsWith(`characters/${username}`),
     )?.url;
   };
 
@@ -46,7 +46,7 @@ const Login = ({ images }: { images: Images }) => {
 
   return (
     <Container className="mt-5 text-center">
-      <h1>Kim jesteś mordeczko 🤔</h1>
+      <h1>Who are you 🤔</h1>
       <div className="d-flex justify-content-center align-items-center flex-wrap">
         {showUsers && users ? (
           Object.entries(users).map(([id, user]) => (
@@ -67,11 +67,11 @@ const Login = ({ images }: { images: Images }) => {
       </div>
       <Modal centered show={showModal} onHide={() => setShowModal(false)}>
         <Modal.Header closeButton>
-          <Modal.Title>Uwaga</Modal.Title>
+          <Modal.Title>Attention</Modal.Title>
         </Modal.Header>
         <Modal.Body>
-          Wybrał_ś <b>{capitalizeFirstLetter(selectedUser || ``)}</b>. To na
-          pewno Ty?
+          You chose <b>{capitalizeFirstLetter(selectedUser || ``)}</b>. Are you
+          sure?
         </Modal.Body>
         <Modal.Footer>
           <Button
@@ -81,7 +81,7 @@ const Login = ({ images }: { images: Images }) => {
               setTimeout(() => setSelectedUser(null), 500);
             }}
           >
-            Jednak nie
+            No
           </Button>
           <Button
             variant="primary"
@@ -90,7 +90,7 @@ const Login = ({ images }: { images: Images }) => {
               loginUser();
             }}
           >
-            Tak, to ja
+            Yes
           </Button>
         </Modal.Footer>
       </Modal>
@@ -109,7 +109,7 @@ export const getStaticProps: GetStaticProps = async () => {
     {
       max_results: 15,
       type: `upload`,
-      prefix: `users`,
+      prefix: `characters`,
     },
     (err, result) => result,
   )) as Images;

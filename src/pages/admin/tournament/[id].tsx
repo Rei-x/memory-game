@@ -57,9 +57,9 @@ const Tournament = ({ tournamentId }: { tournamentId: string }) => {
               className={`${playersInNextGame.length === 0 && `disabled`}`}
               onClick={() => startNextGame()}
             >
-              Następna gra
+              Next game
             </Button>
-            <h5>Gracze w ostatniej grze</h5>
+            <h5>Players in last game</h5>
             <pre>{JSON.stringify(games[games.length - 1].val().players)}</pre>
             <ul>
               {Object.keys(games[games.length - 1].val().players).map(
@@ -75,7 +75,7 @@ const Tournament = ({ tournamentId }: { tournamentId: string }) => {
                         ])
                       }
                     >
-                      Dodaj
+                      Add
                     </Button>
                     <Button
                       variant="success"
@@ -87,14 +87,14 @@ const Tournament = ({ tournamentId }: { tournamentId: string }) => {
                         }
                       }}
                     >
-                      Wygrał
+                      Has won
                     </Button>
                   </li>
                 ),
               )}
             </ul>
             <hr />
-            <h5>Gracze do nowej gry</h5>
+            <h5>Players to new game</h5>
             <ul>
               {playersInNextGame.map((playerName) => (
                 <li key={playerName}>
@@ -109,7 +109,7 @@ const Tournament = ({ tournamentId }: { tournamentId: string }) => {
                       )
                     }
                   >
-                    Usuń
+                    Remove
                   </Button>
                 </li>
               ))}

@@ -32,7 +32,7 @@ const Winner = ({ tournamentId }: { tournamentId: string }) => {
           transform: `translate(-50%, -50%)`,
         }}
       >
-        <h1 className="text-center">Zwyciężcą turnieju jest...</h1>
+        <h1 className="text-center">The winner of the tournament is...</h1>
         <div className="text-center">
           <motion.div
             style={{ fontSize: `3rem` }}

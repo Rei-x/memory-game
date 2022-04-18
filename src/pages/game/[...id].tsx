@@ -160,7 +160,7 @@ const Game = ({
   }
 
   if (!isEverybodyJoined) {
-    return <div>Czekamy na resztę graczy...</div>;
+    return <div>Waiting for other players...</div>;
   }
 
   return (
@@ -188,8 +188,8 @@ const Game = ({
               exit={{ opacity: 0 }}
             >
               <div className="text-center">
-                <h1>Wygrał_ś!!!</h1>
-                <div>Czekaj na następną grę..</div>
+                <h1>You won!!!</h1>
+                <div>Wait for the next game..</div>
                 <Spinner
                   className="mt-3"
                   animation="border"

@@ -8,7 +8,7 @@ const ScorePage = ({ tournamentId }: { tournamentId: string }) => {
   return (
     <Layout>
       <h1>{capitalizeFirstLetter(tournamentId)}</h1>
-      <p>Tutaj masz na bieżąco wyniki</p>
+      <p>Here is the scoreboard</p>
       <Scoreboard tournamentId={tournamentId} />
     </Layout>
   );

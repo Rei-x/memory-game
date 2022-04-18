@@ -31,7 +31,7 @@ const CustomNavbar = () => {
               router.push(`/login`);
             }}
           >
-            Wyloguj
+            Logout
           </Button>
         </Nav>
       </Container>

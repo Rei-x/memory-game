@@ -64,16 +64,16 @@ const Scoreboard = ({ tournamentId }: { tournamentId: string }) => {
 
   return (
     <div>
-      <h2>Tabela</h2>
+      <h2>Tabel</h2>
       {game && (
         <>
           <Table striped bordered hover>
             <thead>
               <tr>
                 <th>#</th>
-                <th>zawodnik</th>
-                <th>wynik</th>
-                <th>czas</th>
+                <th>player</th>
+                <th>score</th>
+                <th>time</th>
               </tr>
             </thead>
             <tbody>
