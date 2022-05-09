@@ -20,6 +20,16 @@
 - ✅ Live updated scoreboard of players
 - 👀 Multiple games at one time
 
+## How to play it?
+Right now, you have only test tournament to choose from.
+
+Go to the website <a href="https://kajtekparty.vercel.app/" target="_blank"/>kajtekparty.vercel.app</a> with your friends, choose your favorite Mario character and click join under Test game.
+Wait a little (serverless functions are slow) and you will be in the lobby.
+
+One person has to be the master of the game. Go to <a href="https://kajtekparty.vercel.app/admin" target="_blank">admin panel</a>, login with github and you can control the game.
+
+Now you can start it and play!
+After each round kick player that was last, if only one player has left click "win" button next to him.
 ## How to run it?
 
 1. Rename `.env.local.example` to `.env.local` <br />
